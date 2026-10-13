@@ -1,0 +1,267 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#070a1a">
+<title>Тебе письмо</title>
+<meta name="description" content="У меня к тебе вопрос…">
+<meta property="og:type" content="website">
+<meta property="og:title" content="✉️ Тебе письмо">
+<meta property="og:description" content="У меня к тебе вопрос…">
+<meta property="og:image" content="https://firefilltt.github.io/for-you/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='88'>✉️</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=Nunito:wght@400;600;700;800;900&family=Playfair+Display:ital,wght@1,600;1,700;1,800&display=swap">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<!-- ============ ЛОАДЕР ============ -->
+<div id="loader" class="loader" role="status" aria-live="polite">
+  <div class="ld-orbit" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i></div>
+  <div class="ld-moon">
+    <svg viewBox="0 0 100 100" aria-hidden="true">
+      <defs>
+        <linearGradient id="ldGrad" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0" stop-color="#fff1d6"/>
+          <stop offset=".55" stop-color="#f5c27a"/>
+          <stop offset="1" stop-color="#ff8a5c"/>
+        </linearGradient>
+      </defs>
+      <path class="ld-fill" d="M60 8 A43 43 0 1 0 92 70 A35 35 0 1 1 60 8 Z"/>
+      <path class="ld-stroke" pathLength="100" d="M60 8 A43 43 0 1 0 92 70 A35 35 0 1 1 60 8 Z"/>
+    </svg>
+  </div>
+  <div class="ld-pct"><span id="ldPct">0</span><small>%</small></div>
+  <div class="ld-phrase" id="ldPhrase">Зажигаю звёзды…</div>
+  <div class="ld-bar"><i id="ldBar"></i></div>
+</div>
+
+<!-- ============ СЦЕНА (параллакс) ============ -->
+<div id="scene" class="scene" aria-hidden="true">
+  <div class="sky"></div>
+  <div class="sky-glow"></div>
+  <div class="layer" data-depth="0.03" data-cam="0.6"><canvas id="stars" class="stars"></canvas></div>
+  <div class="layer" data-depth="0.07" data-cam="0.5">
+    <button class="moon" id="moon" tabindex="-1" aria-label="Луна"><i></i><i></i><i></i><b></b></button>
+  </div>
+  <div class="layer lanterns lanterns-far" data-depth="0.12" data-cam="0" id="lanternsFar"></div>
+  <div class="layer" data-depth="0.18" data-cam="1"><svg id="hills" class="hills" viewBox="0 0 1600 300" preserveAspectRatio="none"></svg></div>
+  <div class="layer" data-depth="0.26" data-cam="1"><svg id="cityFar" class="city city-far" viewBox="0 0 1600 300" preserveAspectRatio="xMidYMax slice"></svg></div>
+  <div class="layer" data-depth="0.4" data-cam="1"><svg id="cityNear" class="city city-near" viewBox="0 0 1600 300" preserveAspectRatio="xMidYMax slice"></svg></div>
+  <div class="layer fireflies" data-depth="0.55" data-cam="1" id="fireflies"></div>
+  <div class="layer lanterns lanterns-near" data-depth="0.6" data-cam="0" id="lanternsNear"></div>
+  <div class="vignette"></div>
+</div>
+
+<canvas id="fx" class="fx" aria-hidden="true"></canvas>
+
+<!-- ============ ВЕРХНЯЯ ПАНЕЛЬ ============ -->
+<header class="topbar">
+  <div class="progress" id="progress" aria-label="Прогресс">
+    <i></i><i></i><i></i><i></i><i></i>
+  </div>
+  <button class="sound" id="soundBtn" aria-label="Музыка" aria-pressed="true">
+    <span class="eq"><i></i><i></i><i></i><i></i></span>
+  </button>
+</header>
+
+<main id="app" class="app">
+
+  <!-- ============ КОНВЕРТ ============ -->
+  <section class="screen intro" id="intro" data-step="0">
+    <div class="intro-inner">
+      <p class="hand intro-hint rv" style="--i:0" id="introHint">Тебе письмо…</p>
+      <button class="envelope" id="envelope" aria-label="Открыть письмо">
+        <span class="env-back"></span>
+        <span class="env-letter">
+          <span class="hand">Открой меня</span>
+          <span class="env-letter-mark">✦</span>
+        </span>
+        <span class="env-front"></span>
+        <span class="env-flap"></span>
+        <span class="env-seal"><span>✦</span></span>
+      </button>
+      <p class="intro-tap rv" style="--i:2"><span class="tap-dot"></span> нажми, чтобы открыть</p>
+    </div>
+  </section>
+
+  <!-- ============ 1. ВОПРОС ============ -->
+  <section class="screen" id="s1" data-step="1">
+    <div class="card card-ask">
+      <div class="glyph rv" style="--i:0" id="glyph" aria-hidden="true">
+        <span class="glyph-ring"></span>
+        <span class="glyph-star">✦</span>
+      </div>
+      <p class="hand kicker rv" style="--i:1" id="askKicker">У меня к тебе вопрос…</p>
+      <h1 class="title split" id="askTitle">Пойдёшь со&nbsp;мной на свидание?</h1>
+      <div class="ask-actions rv" style="--i:4" id="askActions">
+        <button class="btn btn-yes" id="yesBtn"><span>Да</span></button>
+        <button class="btn btn-no" id="noBtn"><span>Нет</span></button>
+      </div>
+      <p class="hand ask-comment" id="askComment" aria-live="polite"></p>
+    </div>
+  </section>
+
+  <!-- ============ 2. КОГДА ============ -->
+  <section class="screen" id="s2" data-step="2">
+    <div class="card">
+      <p class="step-label rv" style="--i:0">Шаг 2 из 5</p>
+      <h2 class="title title-sm rv" style="--i:1">Когда тебе удобно?</h2>
+      <p class="sub rv" style="--i:2">Выбери день — остальное беру на&nbsp;себя</p>
+
+      <div class="chips rv" style="--i:3" id="quickDates"></div>
+
+      <div class="calendar rv" style="--i:4">
+        <div class="cal-head">
+          <button class="cal-nav" id="calPrev" aria-label="Предыдущий месяц">‹</button>
+          <div class="cal-title" id="calTitle"></div>
+          <button class="cal-nav" id="calNext" aria-label="Следующий месяц">›</button>
+        </div>
+        <div class="cal-wd"><span>Пн</span><span>Вт</span><span>Ср</span><span>Чт</span><span>Пт</span><span class="we">Сб</span><span class="we">Вс</span></div>
+        <div class="cal-grid" id="calGrid"></div>
+      </div>
+      <p class="hand date-comment" id="dateComment" aria-live="polite"></p>
+
+      <div class="time-block" id="timeBlock">
+        <div class="time-head">
+          <span class="time-label">Во сколько?</span>
+          <span class="time-value"><span id="timeEmoji">🌆</span> <b id="timeValue">19:00</b></span>
+        </div>
+        <div class="range-wrap">
+          <input type="range" id="timeRange" min="600" max="1380" step="30" value="1140" aria-label="Время свидания">
+          <div class="range-ticks"><span>10:00</span><span>14:00</span><span>18:00</span><span>23:00</span></div>
+        </div>
+        <p class="hand time-comment" id="timeComment"></p>
+      </div>
+
+      <div class="nav-row">
+        <span></span>
+        <button class="btn btn-next" id="next2" disabled>Дальше <em>→</em></button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 3. ЕДА ============ -->
+  <section class="screen" id="s3" data-step="3">
+    <div class="card card-wide">
+      <p class="step-label rv" style="--i:0">Шаг 3 из 5</p>
+      <h2 class="title title-sm rv" style="--i:1">Что любишь есть?</h2>
+      <p class="sub rv" style="--i:2">Можно несколько — я запомню</p>
+      <div class="food-grid" id="foodGrid"></div>
+      <p class="hand pick-comment" id="foodComment" aria-live="polite"></p>
+      <label class="field rv" style="--i:6">
+        <span>Что-то не ешь? <small>(необязательно)</small></span>
+        <input type="text" id="noFood" maxlength="80" placeholder="например: не люблю кинзу" autocomplete="off">
+      </label>
+      <div class="nav-row">
+        <button class="btn-back" data-back>← назад</button>
+        <button class="btn btn-next" id="next3" disabled>Дальше <em>→</em></button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 4. ПОСЛЕ ============ -->
+  <section class="screen" id="s4" data-step="4">
+    <div class="card card-wide">
+      <p class="step-label rv" style="--i:0">Шаг 4 из 5</p>
+      <h2 class="title title-sm rv" style="--i:1">А после ужина?</h2>
+      <p class="sub rv" style="--i:2">Чем займёмся — можно несколько</p>
+      <div class="pills" id="funPills"></div>
+      <p class="hand pick-comment" id="funComment" aria-live="polite"></p>
+      <div class="dress rv" style="--i:5">
+        <p class="dress-label">Дресс-код?</p>
+        <div class="seg" id="dressSeg"></div>
+      </div>
+      <div class="nav-row">
+        <button class="btn-back" data-back>← назад</button>
+        <button class="btn btn-next" id="next4" disabled>Дальше <em>→</em></button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 5. ИТОГ ============ -->
+  <section class="screen" id="s5" data-step="5">
+    <div class="card card-wide" id="finalCard">
+      <p class="step-label rv" style="--i:0">Шаг 5 из 5</p>
+      <h2 class="title title-sm rv" style="--i:1">Итак, первое свидание</h2>
+      <div class="ticket-slot rv" style="--i:2"><div class="ticket-wrap" id="ticketWrap"></div></div>
+
+      <div class="mood rv" style="--i:3">
+        <div class="mood-head">
+          <span>Насколько ждёшь?</span>
+          <b id="moodValue">70%</b>
+        </div>
+        <input type="range" id="moodRange" min="0" max="100" value="70" aria-label="Насколько ждёшь свидание">
+        <p class="hand mood-comment" id="moodComment">Жду</p>
+      </div>
+
+      <label class="letter rv" style="--i:4">
+        <span class="letter-label">Хочешь что-то добавить? <small>(необязательно)</small></span>
+        <textarea id="msg" maxlength="400" rows="4" placeholder="Пожелания, вопросы или просто привет"></textarea>
+        <span class="letter-count"><span id="msgCount">0</span>/400</span>
+      </label>
+
+      <div class="nav-row">
+        <button class="btn-back" data-back>← назад</button>
+        <button class="btn btn-send" id="sendBtn">Отправить ответ <em>→</em></button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ ФИНАЛ ============ -->
+  <section class="screen" id="done" data-step="6">
+    <div class="card card-done">
+      <div class="done-art rv" style="--i:0">
+        <span class="done-ring"></span>
+        <span class="done-star">✦</span>
+      </div>
+      <h2 class="title rv" style="--i:1" id="doneTitle">Договорились!</h2>
+      <p class="status rv" style="--i:2" id="sendStatus"><span class="spin"></span> отправляю…</p>
+      <p class="sub rv" style="--i:3" id="doneWhen"></p>
+      <div class="countdown rv" style="--i:4" id="countdown">
+        <div><b id="cdD">0</b><span>дней</span></div>
+        <div><b id="cdH">00</b><span>часов</span></div>
+        <div><b id="cdM">00</b><span>минут</span></div>
+        <div><b id="cdS">00</b><span>секунд</span></div>
+      </div>
+      <div class="done-actions rv" style="--i:5">
+        <button class="btn btn-ghost" id="showTicket">Билет</button>
+        <button class="btn btn-ghost" id="addCal">В календарь</button>
+      </div>
+      <p class="hand ps rv" style="--i:6" id="donePs">P.S. Будет интересно.</p>
+      <button class="btn-link rv" style="--i:7" id="editAnswer">изменить ответ</button>
+      <div class="fallback" id="fallback" hidden>
+        <p>Не получилось отправить. Скопируй ответ и пришли мне сообщением:</p>
+        <button class="btn btn-ghost" id="copyAnswer">Скопировать ответ</button>
+      </div>
+    </div>
+  </section>
+</main>
+
+<!-- Билет в модалке -->
+<div class="modal" id="ticketModal" hidden>
+  <div class="modal-backdrop" data-close></div>
+  <div class="modal-body">
+    <div class="ticket-wrap" id="ticketWrap2"></div>
+    <button class="btn btn-ghost modal-close" data-close>Закрыть</button>
+  </div>
+</div>
+
+<!-- Улетающий конверт -->
+<div class="flyer" id="flyer" aria-hidden="true"><span>✉️</span></div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<noscript><p class="noscript">Включи JavaScript, чтобы открыть письмо</p></noscript>
+
+<script src="js/config.js"></script>
+<script src="js/crypto.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
